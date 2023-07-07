@@ -28,6 +28,8 @@ jobs:
       - name: List repository contents
         run: ls -al
         
+      - run: echo "github.action_path:${{ github.action_path }}"
+      
       - name: Get node version
         id: get_node_version
         run: |

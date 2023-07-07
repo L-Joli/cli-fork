@@ -16,9 +16,9 @@ jobs:
         id: check_tag
         run: |
           if git describe --tags --exact-match HEAD >/dev/null 2>&1; then
-            echo "::set-output name=has_tag::true"
+            echo "has_tag=true" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=has_tag::false"
+            echo "has_tag=false" >> $GITHUB_OUTPUT
           fi
 
       # - name: Run Actions if no new tag
@@ -27,14 +27,17 @@ jobs:
       #   steps:
       - name: List repository contents
         run: ls -al
-      
-      - run: export NVMRC=$(cat .nvmrc)
+        
+      - name: Get node version
+        run: |
+          echo "NVMRC=$(cat .nvmrc)" >> $GITHUB_OUTPUT
+          echo jobs.outputs
 
       - name: Set up Node.js
-        if: steps.check_tag.outputs.has_tag == 'false'
+        if: jobs.outputs.has_tag == 'false'
         uses: actions/setup-node@v3
         with:
-          node-version: $NVMRC
+          node-version: jobs.outputs.NVMRC
 
       - name: Install dependencies
         if: steps.check_tag.outputs.has_tag == 'false'

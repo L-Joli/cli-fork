@@ -14,13 +14,13 @@ jobs:
         uses: actions/checkout@v3
       
       - name: Check if commit has a new tag
-      id: check_tag
-      run: |
-        if git describe --tags --exact-match HEAD >/dev/null 2>&1; then
-          echo "HAS_TAG=true" >> $GITHUB_OUTPUT
-        else
-          echo "HAS_TAG=false" >> $GITHUB_OUTPUT
-        fi
+        id: check_tag
+        run: |
+          if git describe --tags --exact-match HEAD >/dev/null 2>&1; then
+            echo "HAS_TAG=true" >> $GITHUB_OUTPUT
+          else
+            echo "HAS_TAG=false" >> $GITHUB_OUTPUT
+          fi
 
   release:
     if: jobs.checks.steps.check_tag.outputs.HAS_TAG == 'false'

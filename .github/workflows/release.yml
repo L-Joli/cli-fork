@@ -43,6 +43,10 @@ jobs:
       - name: Install dependencies
         if: steps.check_tag.outputs.has_tag == 'false'
         run: yarn install
+        
+      - name: Build
+        if: steps.check_tag.outputs.has_tag == 'false'
+        run: yarn build
 
       - name: List repository contents
         run: ls -al
@@ -50,10 +54,6 @@ jobs:
       - name: Bump CLI version
         if: steps.check_tag.outputs.has_tag == 'false'
         run: npm version patch
-
-      - name: Build
-        if: steps.check_tag.outputs.has_tag == 'false'
-        run: yarn build
 
       - name: Read version from package.json
         if: steps.check_tag.outputs.has_tag == 'false'

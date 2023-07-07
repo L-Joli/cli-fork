@@ -23,8 +23,8 @@ jobs:
           fi
 
   release:
-    if: jobs.checks.steps.check_tag.outputs.HAS_TAG == 'false'
     needs: checks
+    if: needs.checks.steps.check_tag.outputs.HAS_TAG == 'false'
     runs-on: ubuntu-latest
     steps:
       - name: Check out code

@@ -6,75 +6,71 @@ on:
   #   - cron: '0 12 * * 2'  # Runs every Tuesday at 12:00 PM (noon) ET
 
 jobs:
-  release:
+
+  checks:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
         uses: actions/checkout@v3
-        
+      
+      - name: Check if commit has a new tag
+      id: check_tag
+      run: |
+        if git describe --tags --exact-match HEAD >/dev/null 2>&1; then
+          echo "HAS_TAG=true" >> $GITHUB_OUTPUT
+        else
+          echo "HAS_TAG=false" >> $GITHUB_OUTPUT
+        fi
+
+  release:
+    if: jobs.checks.steps.check_tag.outputs.HAS_TAG == 'false'
+    needs: checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      # need to update
       - name: Set Git author
         run: |
           git config user.email "joli.lui@taplytics.com"
           git config user.name "Joli Lui"
 
-      - name: Check if commit has a new tag
-        id: check_tag
-        run: |
-          if git describe --tags --exact-match HEAD >/dev/null 2>&1; then
-            echo "::set-output name=has_tag::true"
-          else
-            echo "::set-output name=has_tag::false"
-          fi
-
       # - name: Run Actions if no new tag
-      #   if: steps.check_tag.outputs.has_tag == 'false'
+      #   if: steps.check_tag.outputs.HAS_TAG == 'false'
       #   run: echo "Run Actions if no new tag"
       #   steps:
-        
-      - run: echo "github.action_path:${{ github.action_path }}"
       
       - name: Get node version
         id: get_node_version
         run: |
-          echo "::set-output name=NVMRC::$(cat .nvmrc)"
-          echo $(cat .nvmrc)
+          echo "NVMRC=$(cat .nvmrc)" >> $GITHUB_OUTPUT
 
       - name: Set up Node.js
-        if: steps.check_tag.outputs.has_tag == 'false'
         uses: actions/setup-node@v3
         with:
           node-version: "${{ steps.get_node_version.outputs.NVMRC }}"
 
       - name: Install dependencies
-        if: steps.check_tag.outputs.has_tag == 'false'
         run: yarn install
         
       - name: Build
-        if: steps.check_tag.outputs.has_tag == 'false'
         run: yarn build
 
-      - name: List repository contents
-        run: ls -al
-
       - name: Bump CLI version
-        if: steps.check_tag.outputs.has_tag == 'false'
         run: npm version patch --force
 
       - name: Read version from package.json
         id: get_cli_version
-        if: steps.check_tag.outputs.has_tag == 'false'
-        run: |
-          echo "::set-output name=CLI_VERSION::$(node -p "require('./package.json').version")"
+        run: echo "CLI_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
 
       - name: Commit and push tag to main branch
-        if: steps.check_tag.outputs.has_tag == 'false'
         run: |
           git add .
           git commit -m "Release v${{ steps.get_cli_version.outputs.CLI_VERSION }}"
           git push origin main --follow-tags
       
       - name: Create GitHub Release
-        if: steps.check_tag.outputs.has_tag == 'false'
         uses: ncipollo/release-action@v1
         with:
           name: "v${{ steps.get_cli_version.outputs.CLI_VERSION }}"

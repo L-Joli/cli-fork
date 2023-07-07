@@ -14,8 +14,8 @@ jobs:
         
       - name: Set Git author
         run: |
-          git config user.email "dvc"
-          git config user.name "joli.lui@taplytics.com"
+          git config user.email "joli.lui@taplytics.com"
+          git config user.name "Joli Lui"
 
       - name: Check if commit has a new tag
         id: check_tag
@@ -69,7 +69,6 @@ jobs:
       - name: Commit and push tag to main branch
         if: steps.check_tag.outputs.has_tag == 'false'
         run: |
-          git checkout main
           git add .
           git commit -m "Release v$VERSION"
           git push origin main --follow-tags

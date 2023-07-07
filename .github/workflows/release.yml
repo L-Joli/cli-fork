@@ -32,7 +32,9 @@ jobs:
 #     if: needs.checks.outputs.HAS_TAG == 'false'
     steps:
       - name: echo value
-        run: echo "${{ needs.checks.steps.check_tag.outputs.HAS_TAG }}"
+        run: |
+          echo "${{ needs.checks.outputs.HAS_TAG }}"
+          echo "${{ needs.checks.outputs }}"
       
       - name: Check out code
         uses: actions/checkout@v3

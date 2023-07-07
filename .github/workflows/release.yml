@@ -14,8 +14,8 @@ jobs:
         
       - name: Set Git author
         run: |
-          git config user.email "${{ github.event.committer.email }}"
-          git config user.name "${{ github.event.committer.name }}"
+          git config user.email "dvc"
+          git config user.name "joli.lui@taplytics.com"
 
       - name: Check if commit has a new tag
         id: check_tag

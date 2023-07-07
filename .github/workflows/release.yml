@@ -29,13 +29,8 @@ jobs:
   release:
     runs-on: ubuntu-latest
     needs: checks
-#     if: needs.checks.outputs.HAS_TAG == 'false'
-    steps:
-      - name: echo value
-        run: |
-          echo "${{ needs.checks.outputs.HAS_TAG }}"
-          echo "${{ needs.checks.outputs }}"
-      
+    if: needs.checks.outputs.HAS_TAG == 'false'
+    steps:      
       - name: Check out code
         uses: actions/checkout@v3
 

@@ -78,6 +78,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           name: "v${{ steps.get_cli_version.outputs.CLI_VERSION }}"
+          tag: "v${{ steps.get_cli_version.outputs.CLI_VERSION }}"
           generateReleaseNotes: "true"
           makeLatest: "true"
 

@@ -71,7 +71,8 @@ jobs:
       - name: Commit and push tag to main branch
         run: |
           git add .
-          git commit -m "Release v${{ steps.get_cli_version.outputs.CLI_VERSION }}"
+          git commit --amend -m "Release v${{ steps.get_cli_version.outputs.CLI_VERSION }}"
+          git tag -f $(git describe --abbrev=0 --tags)
           git push origin main --follow-tags
       
       - name: Create GitHub Release

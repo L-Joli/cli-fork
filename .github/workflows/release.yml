@@ -23,56 +23,63 @@ jobs:
             echo "::set-output name=has_tag::false"
           fi
 
-      - name: Run Actions if no new tag
+      # - name: Run Actions if no new tag
+      #   if: steps.check_tag.outputs.has_tag == 'false'
+      #   run: echo "Run Actions if no new tag"
+      #   steps:
+      - name: Set up Node.js
         if: steps.check_tag.outputs.has_tag == 'false'
-        run: echo "Run Actions if no new tag"
-        steps:
-          - name: Set up Node.js
-            uses: actions/setup-node@v3
-            with:
-              node-version: $(cat .nvmrc)
+        uses: actions/setup-node@v3
+        with:
+          node-version: $(cat .nvmrc)
 
-          - name: Install dependencies
-            run: yarn install
+      - name: Install dependencies
+        if: steps.check_tag.outputs.has_tag == 'false'
+        run: yarn install
 
-          - name: Bump CLI version
-            run: npm version patch
+      - name: Bump CLI version
+        if: steps.check_tag.outputs.has_tag == 'false'
+        run: npm version patch
 
-          - name: Build
-            run: yarn build
+      - name: Build
+        if: steps.check_tag.outputs.has_tag == 'false'
+        run: yarn build
 
-          - name: Read version from package.json
-            run: |
-              export VERSION=$(node -p "require('./package.json').version")
-              echo "CLI version: $VERSION"
+      - name: Read version from package.json
+        if: steps.check_tag.outputs.has_tag == 'false'
+        run: |
+          export VERSION=$(node -p "require('./package.json').version")
+          echo "CLI version: $VERSION"
 
-          - name: Commit and push tag to main branch
-            run: |
-              git checkout main
-              git add .
-              git commit -m "Release v$VERSION"
-              git push origin main --follow-tags
-          
-          - name: Create GitHub Release
-            uses: ncipollo/release-action@v1
-            with:
-              name: "v$VERSION"
-              generateReleaseNotes: "true"
-              makeLatest: "true"
+      - name: Commit and push tag to main branch
+        if: steps.check_tag.outputs.has_tag == 'false'
+        run: |
+          git checkout main
+          git add .
+          git commit -m "Release v$VERSION"
+          git push origin main --follow-tags
+      
+      - name: Create GitHub Release
+        if: steps.check_tag.outputs.has_tag == 'false'
+        uses: ncipollo/release-action@v1
+        with:
+          name: "v$VERSION"
+          generateReleaseNotes: "true"
+          makeLatest: "true"
 
-          # - name: Publish to NPM
-          #   run: npm publish --access public
+      # - name: Publish to NPM
+      #   run: npm publish --access public
 
-          # - name: Update CLI version in docs repo
-          #   run: |
-          #     git clone https://github.com/DevCycleHQ/devcycle-docs.git
-          #     cd devcycle-docs
-          #     sed -i "s/const DVC_CLI_VERSION = .*/const DVC_CLI_VERSION = 'v$VERSION'/" docusaurus.config.js
-          #     git add docusaurus.config.js
-          #     git commit -m "Update CLI version to v$VERSION"
-          #     git remote set-url origin https://github.com/DevCycleHQ/devcycle-docs.git
-          #     BRANCH_NAME="update-cli-version"
-          #     git branch "$BRANCH_NAME"
-          #     git checkout "$BRANCH_NAME"
-          #     git push -u origin "$BRANCH_NAME"
-          #     gh pr create --repo DevCycleHQ/devcycle-docs --base main --head "$BRANCH_NAME" --title "Update CLI version to v$VERSION" --body "This PR was automatically created by the DevCycle CLI release workflow."
+      # - name: Update CLI version in docs repo
+      #   run: |
+      #     git clone https://github.com/DevCycleHQ/devcycle-docs.git
+      #     cd devcycle-docs
+      #     sed -i "s/const DVC_CLI_VERSION = .*/const DVC_CLI_VERSION = 'v$VERSION'/" docusaurus.config.js
+      #     git add docusaurus.config.js
+      #     git commit -m "Update CLI version to v$VERSION"
+      #     git remote set-url origin https://github.com/DevCycleHQ/devcycle-docs.git
+      #     BRANCH_NAME="update-cli-version"
+      #     git branch "$BRANCH_NAME"
+      #     git checkout "$BRANCH_NAME"
+      #     git push -u origin "$BRANCH_NAME"
+      #     gh pr create --repo DevCycleHQ/devcycle-docs --base main --head "$BRANCH_NAME" --title "Update CLI version to v$VERSION" --body "This PR was automatically created by the DevCycle CLI release workflow."

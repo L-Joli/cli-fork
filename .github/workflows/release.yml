@@ -11,6 +11,11 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
+        
+      - name: Set Git author
+        run: |
+          git config user.email "${{ github.event.committer.email }}"
+          git config user.name "${{ github.event.committer.name }}"
 
       - name: Check if commit has a new tag
         id: check_tag

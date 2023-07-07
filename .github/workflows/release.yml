@@ -27,7 +27,6 @@ jobs:
       #   steps:
       - name: List repository contents
         run: ls -al
-      - run: rm oclif.manifest.json
         
       - run: echo "github.action_path:${{ github.action_path }}"
       

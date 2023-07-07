@@ -24,6 +24,7 @@ jobs:
           fi
 
       - name: Run Actions if no new tag
+        run: echo "Run Actions if no new tag"
         if: steps.check_tag.outputs.has_tag == 'false'
         steps:
           - name: Set up Node.js

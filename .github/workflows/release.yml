@@ -61,23 +61,23 @@ jobs:
         run: npm version patch --force
 
       - name: Read version from package.json
+        id: get_cli_version
         if: steps.check_tag.outputs.has_tag == 'false'
         run: |
-          export VERSION=$(node -p "require('./package.json').version")
-          echo "CLI version: $VERSION"
+          echo "::set-output name=CLI_VERSION::$(node -p "require('./package.json').version")"
 
       - name: Commit and push tag to main branch
         if: steps.check_tag.outputs.has_tag == 'false'
         run: |
           git add .
-          git commit -m "Release v$VERSION"
+          git commit -m "Release v${{ steps.get_cli_version.outputs.CLI_VERSION }}"
           git push origin main --follow-tags
       
       - name: Create GitHub Release
         if: steps.check_tag.outputs.has_tag == 'false'
         uses: ncipollo/release-action@v1
         with:
-          name: "v$VERSION"
+          name: "v${{ steps.get_cli_version.outputs.CLI_VERSION }}"
           generateReleaseNotes: "true"
           makeLatest: "true"
 

@@ -53,7 +53,7 @@ jobs:
 
       - name: Bump CLI version
         if: steps.check_tag.outputs.has_tag == 'false'
-        run: npm version patch
+        run: npm version patch --force
 
       - name: Read version from package.json
         if: steps.check_tag.outputs.has_tag == 'false'

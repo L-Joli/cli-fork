@@ -101,7 +101,9 @@ jobs:
           echo $BRANCH_NAME
           git branch "$BRANCH_NAME"
           git checkout "$BRANCH_NAME"
+          git config credential.helper "store --file=.git/credentials"  # Store the token as a secret
+          echo "https://github.com/L-Joli/devcycle-docs-fork.git ${{ secrets.GITHUB_TOKEN }}" >> .git/credentials
           echo PUSHING BRANCH...
-          git push -u origin "$BRANCH_NAME" --token ${{ secrets.GITHUB_TOKEN }}
+          git push -u origin "$BRANCH_NAME"
           echo PR CREATING...
           gh pr create --repo DevCycleHQ/devcycle-docs --base main --head "$BRANCH_NAME" --title "Update CLI version to v${{ steps.get_cli_version.outputs.CLI_VERSION }}" --body "This PR was automatically created by the DevCycle CLI release workflow." --token ${{ secrets.GITHUB_TOKEN }}

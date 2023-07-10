@@ -72,6 +72,10 @@ jobs:
         run: |
           git add .
           git commit --amend -m "Release v${{ steps.get_cli_version.outputs.CLI_VERSION }}"
+          git log
+          git describe --abbrev=0 --tags
+          git tag
+          git log
           git tag -f $(git describe --abbrev=0 --tags)
           git push origin main --follow-tags
       

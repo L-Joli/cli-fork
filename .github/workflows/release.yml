@@ -96,6 +96,7 @@ jobs:
         with:
         # replace all L-Joli/devcycle-docs-fork with DevCycleHQ/devcycle-docs
           repository: L-Joli/devcycle-docs-fork
+          persist-credentials: false
 
       - name: Set Git author
         run: |
@@ -113,6 +114,6 @@ jobs:
           git add docusaurus.config.js
           git commit -m "Update CLI version to v${{ steps.get_cli_version.outputs.CLI_VERSION }}"
           echo PUSHING BRANCH...
-          git push --set-upstream origin "$BRANCH_NAME"
+          git push -u origin "$BRANCH_NAME"
           echo PR CREATING...
           gh pr create --repo L-Joli/devcycle-docs-fork --base main --head "$BRANCH_NAME" --title "Update CLI version to v${{ steps.get_cli_version.outputs.CLI_VERSION }}" --body "This PR was automatically created by the DevCycle CLI release workflow." --token ${{ secrets.GITHUB_TOKEN }}

@@ -108,6 +108,7 @@ jobs:
           git config user.email 'joli.lui@taplytics.com'
           
       - name: Update CLI version in docs repo
+        if: false
         env:
           BRANCH_NAME: update-cli-version-to-v${{ needs.release.outputs.CLI_VERSION }}
         run: |
@@ -120,6 +121,7 @@ jobs:
           git commit -m "Update CLI version to v${{ needs.release.outputs.CLI_VERSION }}"
 
       - name: Push code to another repository
+        if: false
         env:
           BRANCH_NAME: update-cli-version-to-v${{ needs.release.outputs.CLI_VERSION }}
         run:  |

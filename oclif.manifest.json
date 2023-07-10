@@ -1,5 +1,5 @@
 {
-  "version": "4.6.10",
+  "version": "4.6.11",
   "commands": {
     "authCommand": {
       "id": "authCommand",

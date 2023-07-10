@@ -87,7 +87,9 @@ jobs:
   update_doc:
     runs-on: ubuntu-latest
     needs: release
-    permissions: write-all
+    permissions:
+      contents: write
+      pull-requests: write 
     steps:      
       - name: Check out code
         uses: actions/checkout@v3

@@ -128,6 +128,6 @@ jobs:
       - name: pr
         env:
           BRANCH_NAME: update-cli-version-to-v${{ needs.release.outputs.CLI_VERSION }}
-        run: gh pr create --repo L-Joli/devcycle-docs-fork --base main --head "$BRANCH_NAME" --title "Update CLI version to v${{ needs.release.outputs.CLI_VERSION }}" --body "This PR was automatically created by the DevCycle CLI release workflow." --token ${{ secrets.PAT_TOKEN }}
+        run: gh pr create --repo L-Joli/devcycle-docs-fork --base main --head "$BRANCH_NAME" --title "Update CLI version to v${{ needs.release.outputs.CLI_VERSION }}" --body "This PR was automatically created by the DevCycle CLI release workflow."
    
         

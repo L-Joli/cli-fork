@@ -1,6 +1,6 @@
 {
   "name": "@devcycle/cli",
-  "version": "4.6.13",
+  "version": "4.6.14",
   "description": "DevCycle CLI Tool",
   "author": "support@devcycle.com",
   "bin": {

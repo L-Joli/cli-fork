@@ -100,6 +100,7 @@ jobs:
         with:
         # replace all L-Joli/devcycle-docs-fork with DevCycleHQ/devcycle-docs
           repository: L-Joli/devcycle-docs-fork
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Set Git author
         run: |

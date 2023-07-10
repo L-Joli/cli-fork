@@ -91,10 +91,10 @@ jobs:
         env:
           BRANCH_NAME: update-cli-version-to-v${{ steps.get_cli_version.outputs.CLI_VERSION }}
         run: |
-          git clone https://github.com/L-Joli/devcycle-docs-fork
+          git clone git@github.com:L-Joli/devcycle-docs-fork.git
           cd devcycle-docs-fork
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           sed -i "s/const DVC_CLI_VERSION = .*/const DVC_CLI_VERSION = 'v${{ steps.get_cli_version.outputs.CLI_VERSION }}'/" docusaurus.config.js
           git add docusaurus.config.js
           git commit -m "Update CLI version to v${{ steps.get_cli_version.outputs.CLI_VERSION }}"

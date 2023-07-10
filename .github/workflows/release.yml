@@ -98,6 +98,7 @@ jobs:
         with:
         # replace all L-Joli/devcycle-docs-fork with DevCycleHQ/devcycle-docs
           repository: L-Joli/devcycle-docs-fork
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set Git author
         run: |

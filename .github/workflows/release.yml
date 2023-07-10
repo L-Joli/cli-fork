@@ -102,6 +102,6 @@ jobs:
           git branch "$BRANCH_NAME"
           git checkout "$BRANCH_NAME"
           echo PUSHING BRANCH...
-          git push -u origin "$BRANCH_NAME"
+          git push -u origin "$BRANCH_NAME" --token ${{ secrets.GITHUB_TOKEN }}
           echo PR CREATING...
           gh pr create --repo DevCycleHQ/devcycle-docs --base main --head "$BRANCH_NAME" --title "Update CLI version to v${{ steps.get_cli_version.outputs.CLI_VERSION }}" --body "This PR was automatically created by the DevCycle CLI release workflow." --token ${{ secrets.GITHUB_TOKEN }}

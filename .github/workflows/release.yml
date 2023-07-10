@@ -95,27 +95,16 @@ jobs:
       pull-requests: write 
 #     needs: release
     steps:      
-      - run: | 
-          pwd
-          ls -al
-          ls ../..
-          cd ../..
-          mkdir doc-repo
       - name: Check out code
         uses: actions/checkout@v2
         with:
         # replace all L-Joli/devcycle-docs-fork with DevCycleHQ/devcycle-docs
           repository: L-Joli/devcycle-docs-fork
-          persist-credentials: false
-          fetch-depth: 0
-          path: "doc-repo"
-          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Set Git author
         run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git config --global credential.helper cache
+          git config user.name 'L-Joli'
+          git config user.email 'joli.lui@taplytics.com'
           
       - name: Update CLI version in docs repo
         env:

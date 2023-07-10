@@ -121,11 +121,9 @@ jobs:
           git commit -m "Update CLI version to v${{ needs.release.outputs.CLI_VERSION }}"
 
       - name: Push code to another repository
-        env:
-          BRANCH_NAME: update-cli-version-to-v${{ needs.release.outputs.CLI_VERSION }}
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.PAT_TOKEN }}
+        run:  |
+          git remote get-url origin
+          git push 
 
       - name: pr
         env:

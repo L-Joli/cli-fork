@@ -94,15 +94,15 @@ jobs:
           cd devcycle-docs-fork
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull
+          echo $BRANCH_NAME
+          git branch "$BRANCH_NAME"
+          git checkout "$BRANCH_NAME"
+          git branch
           sed -i "s/const DVC_CLI_VERSION = .*/const DVC_CLI_VERSION = 'v${{ steps.get_cli_version.outputs.CLI_VERSION }}'/" docusaurus.config.js
           git add docusaurus.config.js
           git commit -m "Update CLI version to v${{ steps.get_cli_version.outputs.CLI_VERSION }}"
           git remote set-url origin https://github.com/L-Joli/devcycle-docs-fork
-          echo $BRANCH_NAME
-          git branch "$BRANCH_NAME"
-          git checkout "$BRANCH_NAME"
-          git config credential.helper "store --file=.git/credentials"  # Store the token as a secret
-          echo "https://github.com/L-Joli/devcycle-docs-fork.git ${{ secrets.GITHUB_TOKEN }}" >> .git/credentials
           echo PUSHING BRANCH...
           git push -u origin "$BRANCH_NAME"
           echo PR CREATING...

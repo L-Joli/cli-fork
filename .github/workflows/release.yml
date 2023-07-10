@@ -95,6 +95,10 @@ jobs:
       pull-requests: write 
 #     needs: release
     steps:      
+      - run: | 
+          pwd
+          ls -al
+          ls ..
       - name: Check out code
         uses: actions/checkout@v3
         with:
@@ -102,6 +106,8 @@ jobs:
           repository: L-Joli/devcycle-docs-fork
           persist-credentials: false
           fetch-depth: 0
+          path: ".."
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Set Git author
         run: |
@@ -125,9 +131,6 @@ jobs:
         env:
           BRANCH_NAME: update-cli-version-to-v${{ needs.release.outputs.CLI_VERSION }}
         run:  |
-          git remote get-url origin
-          git remote rm origin
-          git remote set-url origin git@github.com:L-Joli/devcycle-docs-fork.git
           git push --set-upstream origin "$BRANCH_NAME"
 
       - name: pr

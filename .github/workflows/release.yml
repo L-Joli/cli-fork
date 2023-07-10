@@ -86,9 +86,10 @@ jobs:
 
       - name: Update CLI version in docs repo
       # replace with https://github.com/DevCycleHQ/devcycle-docs.git
+      # cd devcycle-docs
         run: |
           git clone https://github.com/L-Joli/devcycle-docs-fork
-          cd devcycle-docs
+          cd devcycle-docs-fork
           sed -i "s/const DVC_CLI_VERSION = .*/const DVC_CLI_VERSION = 'v$VERSION'/" docusaurus.config.js
           git add docusaurus.config.js
           git commit -m "Update CLI version to v$VERSION"

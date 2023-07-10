@@ -82,8 +82,8 @@ jobs:
           makeLatest: "true"
 
       # - name: Publish to NPM
-      #   run: npm publish --access public
-
+      #   run: npm publish --access public  
+      - uses: actions/checkout@v3
       - name: Update CLI version in docs repo
       # replace with https://github.com/DevCycleHQ/devcycle-docs.git
       # cd devcycle-docs

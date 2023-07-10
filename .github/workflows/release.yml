@@ -68,19 +68,23 @@ jobs:
         id: get_cli_version
         run: echo "CLI_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
 
-      - name: check tag
+      - name: Get latest tag
+        id: get_latest_tag
         run: |
+          echo "LATEST_TAG=$(git describe --abbrev=0 --tags)" >> $GITHUB_OUTPUT
           git log
           echo $(git describe --abbrev=0 --tags)
           ls -al
           cd .git/refs/tags
           ls
+
+
           
       - name: Commit and push tag to main branch
         run: |
           git add .
           git commit --amend -m "Release v${{ steps.get_cli_version.outputs.CLI_VERSION }}"
-          git tag -f $(git describe --abbrev=0 --tags)
+          git tag -f ${{ steps.get_latest_tag.outputs.LATEST_TAG }}
           git push origin main --follow-tags
       
       - name: Create GitHub Release

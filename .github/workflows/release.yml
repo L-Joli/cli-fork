@@ -127,7 +127,7 @@ jobs:
         run:  |
           git remote get-url origin
           git remote rm origin
-          git remote add origin https://github-actions[bot]:${{ secrets.PAT_TOKEN }}@github.com/L-Joli/devcycle-docs-fork.git
+          git remote set-url origin git@github.com:L-Joli/devcycle-docs-fork.git
           git push --set-upstream origin "$BRANCH_NAME"
 
       - name: pr

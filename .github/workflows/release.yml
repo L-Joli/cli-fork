@@ -126,6 +126,7 @@ jobs:
           BRANCH_NAME: update-cli-version-to-v${{ needs.release.outputs.CLI_VERSION }}
         run:  |
           git remote get-url origin
+          git remote add origin https://github-actions[bot]:${{ secrets.PAT_TOKEN }}@github.com/L-Joli/devcycle-docs-fork.git
           git push --set-upstream origin "$BRANCH_NAME"
 
       - name: pr

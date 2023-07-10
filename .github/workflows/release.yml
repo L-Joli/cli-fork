@@ -99,6 +99,8 @@ jobs:
           pwd
           ls -al
           ls ../..
+          cd ../..
+          mkdir doc-repo
       - name: Check out code
         uses: actions/checkout@v3
         with:
@@ -106,7 +108,7 @@ jobs:
           repository: L-Joli/devcycle-docs-fork
           persist-credentials: false
           fetch-depth: 0
-          path: "../../doc"
+          path: "doc-repo"
           token: ${{ secrets.PAT_TOKEN }}
 
       - name: Set Git author

@@ -96,7 +96,6 @@ jobs:
         with:
         # replace all L-Joli/devcycle-docs-fork with DevCycleHQ/devcycle-docs
           repository: L-Joli/devcycle-docs-fork
-          persist-credentials: false
 
       - name: Set Git author
         run: |

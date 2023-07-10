@@ -4,10 +4,7 @@ on:
   workflow_dispatch:
   # schedule:
   #   - cron: '0 12 * * 2'  # Runs every Tuesday at 12:00 PM (noon) ET
-permissions:
-  contents: write
-  pull-requests: write 
-  
+
 jobs:
 
   checks:
@@ -91,6 +88,9 @@ jobs:
 
   update_doc:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write 
     needs: release
     steps:      
       - name: Check out code
@@ -103,8 +103,6 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git config --global credential.helper 'store --file=.git-credentials'
-          echo "https://${{ secrets.PAT_TOKEN }}@github.com" > .git-credentials
 
       - name: Update CLI version in docs repo
         env:
@@ -115,8 +113,19 @@ jobs:
           git branch
           sed -i "s/const DVC_CLI_VERSION = .*/const DVC_CLI_VERSION = 'v${{ needs.release.outputs.CLI_VERSION }}'/" docusaurus.config.js
           git add docusaurus.config.js
-          git commit -m "Update CLI version to v${{ needs.release.outputs.CLI_VERSION }}"
-          echo PUSHING BRANCH...
-          git push -u origin "$BRANCH_NAME"
-          echo PR CREATING...
-          gh pr create --repo L-Joli/devcycle-docs-fork --base main --head "$BRANCH_NAME" --title "Update CLI version to v${{ needs.release.outputs.CLI_VERSION }}" --body "This PR was automatically created by the DevCycle CLI release workflow." --token ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push
+        env:
+          BRANCH_NAME: update-cli-version-to-v${{ needs.release.outputs.CLI_VERSION }}
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          commit_message: "Automated Change: Update CLI version to v${{ needs.release.outputs.CLI_VERSION }}"
+          branch: $BRANCH_NAME
+          
+      - name: PR
+        env:
+          BRANCH_NAME: update-cli-version-to-v${{ needs.release.outputs.CLI_VERSION }}
+        run: gh pr create --repo L-Joli/devcycle-docs-fork --base main --head "$BRANCH_NAME" --title "Update CLI version to v${{ needs.release.outputs.CLI_VERSION }}" --body "This PR was automatically created by the DevCycle CLI release workflow." --token ${{ secrets.PAT_TOKEN }}
+          
+        

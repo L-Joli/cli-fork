@@ -102,7 +102,7 @@ jobs:
           cd ../..
           mkdir doc-repo
       - name: Check out code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
         with:
         # replace all L-Joli/devcycle-docs-fork with DevCycleHQ/devcycle-docs
           repository: L-Joli/devcycle-docs-fork

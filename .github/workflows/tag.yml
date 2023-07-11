@@ -47,7 +47,7 @@ jobs:
       - name: Read version from package.json
         id: get_cli_version
         run: |
-          echo "CLI_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
+          echo "CLI_VERSION=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
 
       - name: Get latest tag
         id: get_latest_tag

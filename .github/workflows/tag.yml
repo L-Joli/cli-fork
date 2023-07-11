@@ -26,14 +26,13 @@ jobs:
           sudo apt-get install jq
 
       - name: Get node version
-        id: get_node_version
         run: |
-          echo "NVMRC=$(cat .nvmrc)" >> $GITHUB_OUTPUT
+          echo "NVMRC=$(cat .nvmrc)" >> $GITHUB_ENV
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "${{ steps.get_node_version.outputs.NVMRC }}"
+          node-version: "$NVMRC"
 
       - name: Install dependencies
         run: yarn install
@@ -44,20 +43,13 @@ jobs:
       - name: Bump CLI version
         run: npm version patch --force
 
-      - name: Read version from package.json
-        id: get_cli_version
-        run: |
-          echo "CLI_VERSION=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
-
       - name: Get latest tag
-        id: get_latest_tag
-        run: echo "LATEST_TAG=$(git describe --abbrev=0 --tags)" >> $GITHUB_OUTPUT
+        run: echo "LATEST_TAG=$(git describe --abbrev=0 --tags)" >> $GITHUB_ENV
           
       - name: Commit and push tag to main branch
         run: |
-          echo "CLI VERSION: ${{ steps.get_cli_version.outputs.CLI_VERSION }}"
-          echo "LATEST TAG: ${{ steps.get_latest_tag.outputs.LATEST_TAG }}"
+          echo "LATEST TAG: $LATEST_TAG"
           git add .
-          git commit --amend -m "Release v${{ steps.get_cli_version.outputs.CLI_VERSION }}"
-          git tag -f ${{ steps.get_latest_tag.outputs.LATEST_TAG }}
+          git commit --amend -m "Release $LATEST_TAG"
+          git tag -f $LATEST_TAG
           git push origin main --follow-tags

@@ -104,8 +104,8 @@ jobs:
 
       - name: Set Git author
         run: |
-          git config user.name 'L-Joli'
-          git config user.email 'joli.lui@taplytics.com'
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
           
       - name: Update CLI version in docs repo
         if: false

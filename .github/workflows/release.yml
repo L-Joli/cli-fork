@@ -8,7 +8,6 @@ on:
 jobs:
 
   checks:
-    if: false
     runs-on: ubuntu-latest
     outputs:
       HAS_TAG: ${{ steps.check_tag.outputs.has_tag }}
@@ -28,12 +27,11 @@ jobs:
           fi
 
   release:
-    if: false
     runs-on: ubuntu-latest
     needs: checks
     outputs:
       CLI_VERSION: ${{ steps.get_cli_version.outputs.CLI_VERSION }}
-#     if: needs.checks.outputs.HAS_TAG == 'false'
+    if: needs.checks.outputs.HAS_TAG == 'false'
     steps:      
       - name: Check out code
         uses: actions/checkout@v3
@@ -93,7 +91,9 @@ jobs:
     permissions:
       contents: write
       pull-requests: write 
-#     needs: release
+    needs: release
+    env:
+      BRANCH_NAME: update-cli-version-to-v${{ needs.release.outputs.CLI_VERSION }}
     steps:      
       - name: Check out code
         uses: actions/checkout@v2
@@ -108,9 +108,6 @@ jobs:
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           
       - name: Update CLI version in docs repo
-        if: false
-        env:
-          BRANCH_NAME: update-cli-version-to-v${{ needs.release.outputs.CLI_VERSION }}
         run: |
           ls -al
           echo $BRANCH_NAME
@@ -120,16 +117,12 @@ jobs:
           git add docusaurus.config.js
           git commit -m "Update CLI version to v${{ needs.release.outputs.CLI_VERSION }}"
 
-      - name: Push code to another repository
-        if: false
-        env:
-          BRANCH_NAME: update-cli-version-to-v${{ needs.release.outputs.CLI_VERSION }}
+      - name: Push code to docs repo
         run:  |
           git push --set-upstream origin "$BRANCH_NAME"
 
-      - name: pr
+      - name: Create PR
         env:
-          BRANCH_NAME: update-cli-version-to-v${{ needs.release.outputs.CLI_VERSION }}
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: gh pr create --repo L-Joli/devcycle-docs-fork --base main --head "$BRANCH_NAME" --title "Update CLI version to v${{ needs.release.outputs.CLI_VERSION }}" --body "This PR was automatically created by the DevCycle CLI release workflow."
    

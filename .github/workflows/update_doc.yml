@@ -15,7 +15,7 @@ jobs:
       pull-requests: write 
     steps:      
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: L-Joli/devcycle-docs-fork
           # need to get/update access token

@@ -1,0 +1,56 @@
+name: Tag New Version
+
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: '0 12 * * 2'  # Runs every Tuesday at 12:00 PM (noon) ET
+
+jobs:
+  tag-new-version:
+    runs-on: ubuntu-latest
+    steps:      
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install jq tool
+        run: |
+          sudo apt-get update
+          sudo apt-get install jq
+
+      - name: Get node version
+        id: get_node_version
+        run: |
+          echo "NVMRC=$(cat .nvmrc)" >> $GITHUB_OUTPUT
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "${{ steps.get_node_version.outputs.NVMRC }}"
+
+      - name: Install dependencies
+        run: yarn install
+        
+      - name: Build
+        run: yarn build
+
+      - name: Bump CLI version
+        run: npm version patch --force
+
+      - name: Read version from package.json
+        id: get_cli_version
+        run: |
+          CLI_VERSION=$(jq -r .version package.json)
+          echo "CLI_VERSION=$CLI_VERSION" >> $GITHUB_ENV
+
+      - name: Get latest tag
+        id: get_latest_tag
+        run: echo "LATEST_TAG=$(git describe --abbrev=0 --tags)" >> $GITHUB_OUTPUT
+          
+      - name: Commit and push tag to main branch
+        run: |
+          git add .
+          git commit --amend -m "Release v${{ steps.get_cli_version.outputs.CLI_VERSION }}"
+          git tag -f ${{ steps.get_latest_tag.outputs.LATEST_TAG }}
+          git push origin main --follow-tags

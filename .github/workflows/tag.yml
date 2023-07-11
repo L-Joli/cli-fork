@@ -27,12 +27,12 @@ jobs:
 
       - name: Get node version
         run: |
-          echo "NVMRC=$(cat .nvmrc)" >> $GITHUB_ENV
+          echo "NVMRC=$(cat .nvmrc)" >> $GITHUB_OUTPUT
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: $NVMRC
+          node-version: "${{ steps.get_node_version.outputs.NVMRC }}"
 
       - name: Install dependencies
         run: yarn install

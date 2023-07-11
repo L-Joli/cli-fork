@@ -3,7 +3,7 @@ name: Update Doc
 on:
   workflow_run:
     workflows:
-      - "Tag New Version"
+      - "CLI Release"
     types:
       - completed
 

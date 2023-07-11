@@ -47,8 +47,7 @@ jobs:
       - name: Read version from package.json
         id: get_cli_version
         run: |
-          CLI_VERSION=$(jq -r .version package.json)
-          echo "CLI_VERSION=$CLI_VERSION" >> $GITHUB_ENV
+          echo "CLI_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
 
       - name: Get latest tag
         id: get_latest_tag
@@ -56,6 +55,8 @@ jobs:
           
       - name: Commit and push tag to main branch
         run: |
+          echo "CLI VERSION: ${{ steps.get_cli_version.outputs.CLI_VERSION }}"
+          echo "LATEST TAG: ${{ steps.get_latest_tag.outputs.LATEST_TAG }}"
           git add .
           git commit --amend -m "Release v${{ steps.get_cli_version.outputs.CLI_VERSION }}"
           git tag -f ${{ steps.get_latest_tag.outputs.LATEST_TAG }}

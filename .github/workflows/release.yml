@@ -113,7 +113,7 @@ jobs:
           echo $BRANCH_NAME
           git checkout -b "$BRANCH_NAME"
           git branch
-          sed -i "s/const DVC_CLI_VERSION = .*/const DVC_CLI_VERSION = 'v${{ needs.release.outputs.CLI_VERSION }}'/" docusaurus.config.js
+          sed -i 's/const DVC_CLI_VERSION = .*/const DVC_CLI_VERSION = '\''v${{ needs.release.outputs.CLI_VERSION }}'\'' \/\/ auto updated by dvc cli release workflow/' docusaurus.config.js
           git add docusaurus.config.js
           git commit -m "Update CLI version to v${{ needs.release.outputs.CLI_VERSION }}"
 

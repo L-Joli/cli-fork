@@ -9,6 +9,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
       - name: Create GitHub Release
         uses: DevCycleHQ/release-action@main
         with:

@@ -36,7 +36,7 @@ runs:
       shell: bash
       run: |
         git checkout -b "$BRANCH_NAME"
-        sed -i 's/const DVC_CLI_VERSION = .*/const DVC_CLI_VERSION = '\''${{ inputs.latest_tag }}'\'' \/\/ auto updated by dvc cli release workflow/' docusaurus.config.js
+        sed -i "s/const DVC_CLI_VERSION = .*/const DVC_CLI_VERSION = '${{ inputs.latest_tag }}' \/\/ auto updated by dvc cli release workflow/" docusaurus.config.js
         git add docusaurus.config.js
         git commit -m "Update CLI version to ${{ inputs.latest_tag }}"
 

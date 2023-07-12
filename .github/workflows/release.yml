@@ -20,8 +20,8 @@ jobs:
       - name: Create GitHub Release
         uses: DevCycleHQ/release-action/gh-release@main
         with:
-          draft: true
-          prerelease: true
+          draft: false
+          prerelease: false
           github-token: ${{ secrets.GITHUB_TOKEN }}
           
       # - name: Publish to NPM

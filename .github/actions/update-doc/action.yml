@@ -17,6 +17,7 @@ runs:
       uses: actions/checkout@v3
       with:
         repository: L-Joli/devcycle-docs-fork
+        path: devcycle-docs-fork
         # need to get/update access token
         token: ${{ inputs.access_token }}
         fetch-depth: 0

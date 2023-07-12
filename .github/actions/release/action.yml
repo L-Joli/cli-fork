@@ -1,4 +1,4 @@
-name: CLI Release
+name: GitHub Release
 description: Create a GitHub release and publish to NPM
 
 inputs:

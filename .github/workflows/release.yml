@@ -15,7 +15,7 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
 
       - name: Create GitHub Release
-        uses: DevCycleHQ/release-action@main
+        uses: DevCycleHQ/release-action/gh-release@main
         with:
           draft: true
           prerelease: true

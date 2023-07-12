@@ -50,7 +50,7 @@ jobs:
         run: |
           git add .
           git commit --amend -m "Release $LATEST_TAG"
-          git tag -f $LATEST_TAG
+          git tag -fa $LATEST_TAG
           git push origin main --follow-tags
 
       - name: Release

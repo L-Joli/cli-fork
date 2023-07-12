@@ -6,6 +6,9 @@ inputs:
   latest_tag:
     required: true
     description: 'The latest tag from the workflow that uses this action'
+  access_token:
+    required: true
+    description: 'The access token to use for authentication'
 
 runs:
   using: 'composite'
@@ -15,7 +18,7 @@ runs:
       with:
         repository: L-Joli/devcycle-docs-fork
         # need to get/update access token
-        token: ${{ secrets.PAT_TOKEN }}
+        token: ${{ inputs.access_token }}
         fetch-depth: 0
     
     - name: Set Git author
@@ -44,5 +47,5 @@ runs:
     - name: Create PR
       shell: bash
       env:
-        GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+        GH_TOKEN: ${{ inputs.access_token }}
       run: gh pr create --repo L-Joli/devcycle-docs-fork --base main --head "$BRANCH_NAME" --title "Update CLI version to $LATEST_TAG" --body "This PR was automatically created by the DevCycle CLI release workflow."

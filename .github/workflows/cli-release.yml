@@ -59,3 +59,4 @@ jobs:
         uses: ./.github/actions/update-doc
         with:
           latest_tag: $LATEST_TAG
+          access_token: ${{ secrets.PAT_TOKEN }}

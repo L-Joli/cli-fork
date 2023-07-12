@@ -5,6 +5,14 @@ inputs:
   github-token:
     required: true
     description: 'The GitHub token to use for authentication'
+  draft:
+    required: false
+    description: 'Whether to create a draft (unpublished) release'
+    default: 'true'
+  prerelease:
+    required: false
+    description: 'Whether to create a prerelease release'
+    default: 'true'
 
 runs:
   using: 'composite'
@@ -12,8 +20,8 @@ runs:
     - name: Create GitHub Release
       uses: DevCycleHQ/release-action/gh-release@main
       with:
-        draft: false
-        prerelease: false
+        draft: ${{ inputs.draft }}
+        prerelease: ${{ inputs.prerelease }}
         github-token: ${{ inputs.github-token }}
 
     # - name: Publish to NPM

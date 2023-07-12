@@ -4,6 +4,8 @@ on:
   workflow_dispatch:
   # schedule:
   #   - cron: '0 12 * * 2'  # Runs every Tuesday at 12:00 PM (noon) ET
+permissions:
+  contents: write
 
 jobs:
   tag-new-version:
@@ -13,19 +15,13 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          token: ${{ secrets.PAT_TOKEN }}
-
       - name: Set Git author
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
       
-      - name: Install jq tool
-        run: |
-          sudo apt-get update
-          sudo apt-get install jq
-
       - name: Get node version
+        id: get_node_version
         run: |
           echo "NVMRC=$(cat .nvmrc)" >> $GITHUB_OUTPUT
 
@@ -48,8 +44,7 @@ jobs:
           
       - name: Commit and push tag to main branch
         run: |
-          echo "LATEST TAG: $LATEST_TAG"
           git add .
           git commit --amend -m "Release $LATEST_TAG"
           git tag -f $LATEST_TAG
-          git push origin main --follow-tags
+          git push

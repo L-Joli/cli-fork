@@ -49,4 +49,4 @@ jobs:
           git add .
           git commit --amend -m "Release $LATEST_TAG"
           git tag -f $LATEST_TAG
-          git push
+          git push origin main --follow-tags

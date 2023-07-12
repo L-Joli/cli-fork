@@ -1,11 +1,13 @@
 name: Update Doc
 
+# on:
+#   workflow_run:
+#     workflows:
+#       - "CLI Release"
+#     types:
+#       - completed
 on:
-  workflow_run:
-    workflows:
-      - "CLI Release"
-    types:
-      - completed
+  push:
 
 jobs:
   update_doc:
@@ -27,19 +29,17 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
       
-      - name: Get latest tag
-        id: get_latest_tag
-        run: echo "LATEST_TAG=$(git describe --abbrev=0 --tags)" >> $GITHUB_OUTPUT      
+      - name: Get latest tag and set branch name
+        run: |
+          echo "LATEST_TAG=$(git describe --abbrev=0 --tags)" >> $GITHUB_ENV   
+          echo "BRANCH_NAME=update-cli-version-to-$LATEST_TAG" >> $GITHUB_ENV   
 
       - name: Update CLI version in docs repo
-        env: 
-          CLI_VERSION: v${{ steps.get_latest_tag.outputs.LATEST_TAG }}
-          BRANCH_NAME: update-cli-version-to-${{ env.CLI_VERSION }}
         run: |
           git checkout -b "$BRANCH_NAME"
-          sed -i 's/const DVC_CLI_VERSION = .*/const DVC_CLI_VERSION = '\''$CLI_VERSION'\'' \/\/ auto updated by dvc cli release workflow/' docusaurus.config.js
+          sed -i 's/const DVC_CLI_VERSION = .*/const DVC_CLI_VERSION = '\''$LATEST_TAG'\'' \/\/ auto updated by dvc cli release workflow/' docusaurus.config.js
           git add docusaurus.config.js
-          git commit -m "Update CLI version to $CLI_VERSION"
+          git commit -m "Update CLI version to $LATEST_TAG"
 
       - name: Push code to docs repo
         run:  |
@@ -49,6 +49,4 @@ jobs:
         env:
         # need to get/update access token
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
-          CLI_VERSION: v${{ steps.get_latest_tag.outputs.LATEST_TAG }}
-          BRANCH_NAME: update-cli-version-to-${{ env.CLI_VERSION }}
-        run: gh pr create --repo L-Joli/devcycle-docs-fork --base main --head "$BRANCH_NAME" --title "Update CLI version to $CLI_VERSION" --body "This PR was automatically created by the DevCycle CLI release workflow."
+        run: gh pr create --repo L-Joli/devcycle-docs-fork --base main --head "$BRANCH_NAME" --title "Update CLI version to $LATEST_TAG" --body "This PR was automatically created by the DevCycle CLI release workflow."

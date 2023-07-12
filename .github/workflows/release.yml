@@ -1,27 +1,19 @@
 name: CLI Release
 
-# on:
-#   push:
-#     tags:
-#       - '*'
-
 on:
-  workflow_dispatch:
+  push:
+    tags:
+      - '*'
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      # - name: Check out code
-      #   uses: actions/checkout@v3
-      #   with: 
-      #     token: ${{ secrets.PAT_TOKEN }}
-
       - name: Create GitHub Release
         uses: DevCycleHQ/release-action/gh-release@main
         with:
-          draft: false
-          prerelease: false
+          draft: true
+          prerelease: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
           
       # - name: Publish to NPM

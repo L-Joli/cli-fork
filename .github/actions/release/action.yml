@@ -1,6 +1,11 @@
 name: CLI Release
 description: Create a GitHub release and publish to NPM
 
+inputs:
+  github-token:
+    required: true
+    description: 'The GitHub token to use for authentication'
+
 runs:
   using: 'composite'
   steps:
@@ -9,7 +14,7 @@ runs:
       with:
         draft: false
         prerelease: false
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        github-token: ${{ inputs.github-token }}
 
     # - name: Publish to NPM
     #   shell: bash

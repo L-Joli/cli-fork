@@ -30,7 +30,7 @@ runs:
     - name: Set branch name
       shell: bash
       id: get-branch-name
-      run: echo "BRANCH_NAME=update-cli-version-to-${{ inputs.latest_tag }} >> $GITHUB_ENV
+      run: echo "BRANCH_NAME=update-cli-version-to-${{ inputs.latest_tag }}" >> $GITHUB_ENV
 
     - name: Update CLI version in docs repo
       shell: bash

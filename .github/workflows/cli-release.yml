@@ -6,11 +6,13 @@ on:
       draft-release:
         description: 'Draft release?'
         required: false
-        default: 'true'
+        type: boolean
+        default: true
       prerelease:
         description: 'Create a prerelease?'
         required: false
-        default: 'true'
+        type: boolean
+        default: true
 
   # schedule:
   #   - cron: '0 12 * * 2'  # Runs every Tuesday at 12:00 PM (noon) ET

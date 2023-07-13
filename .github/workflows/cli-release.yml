@@ -61,8 +61,8 @@ jobs:
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
         with:
-          name: "$LATEST_TAG"
-          tag: "$LATEST_TAG"
+          name: $LATEST_TAG
+          tag: $LATEST_TAG
           generateReleaseNotes: "true"
           makeLatest: "true"
 

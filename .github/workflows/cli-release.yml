@@ -14,7 +14,7 @@ on:
         type: boolean
         default: true
       npm-version:
-        description: 'NPM version bump? (default: patch)'
+        description: 'NPM version bump?'
         required: false
         type: choice
         options: 
@@ -75,13 +75,14 @@ jobs:
         uses: ./.github/actions/release
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          release-tag: $LATEST_TAG
+          # cannot read $LATEST_TAG here so using ${{ env.LATEST_TAG }}
+          release-tag: ${{ env.LATEST_TAG }}
           draft: ${{ inputs.draft-release }}
           prerelease: ${{ inputs.prerelease }}
 
       - name: Update Doc
         uses: ./.github/actions/update-doc
         with:
-          latest_tag: ${{ env.LATEST_TAG }}
+          latest_tag: $LATEST_TAG
           # need to get/update access token
           access_token: ${{ secrets.PAT_TOKEN }}

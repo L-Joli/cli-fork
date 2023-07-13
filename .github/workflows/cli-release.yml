@@ -16,57 +16,49 @@ jobs:
         with:
           fetch-depth: 0
 
-      # - name: Set Git author
-      #   run: |
-      #     git config user.name 'github-actions[bot]'
-      #     git config user.email 'github-actions[bot]@users.noreply.github.com'
+      - name: Set Git author
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
       
-      # - name: Get node version
-      #   id: get_node_version
-      #   run: |
-      #     echo "NVMRC=$(cat .nvmrc)" >> $GITHUB_OUTPUT
+      - name: Get node version
+        id: get_node_version
+        run: |
+          echo "NVMRC=$(cat .nvmrc)" >> $GITHUB_OUTPUT
 
-      # - name: Set up Node.js
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     node-version: "${{ steps.get_node_version.outputs.NVMRC }}"
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "${{ steps.get_node_version.outputs.NVMRC }}"
 
-      # - name: Install dependencies
-      #   run: yarn install
+      - name: Install dependencies
+        run: yarn install
         
-      # - name: Build
-      #   run: yarn build
+      - name: Build
+        run: yarn build
 
-      # - name: Bump CLI version
-      #   run: npm version patch --force
+      - name: Bump CLI version
+        run: npm version patch --force
 
       - name: Get latest tag
-        run: |
-          echo "LATEST_TAG=$(git describe --abbrev=0 --tags)" >> $GITHUB_ENV
-          git describe --abbrev=0 --tags
+        run: echo "LATEST_TAG=$(git describe --abbrev=0 --tags)" >> $GITHUB_ENV
           
-      # - name: Commit and push tag to main branch
-      #   run: |
-      #     git add .
-      #     git commit --amend -m "Release $LATEST_TAG"
-      #     git tag -f $LATEST_TAG
-      #     git push origin main --follow-tags
+      - name: Commit and push tag to main branch
+        run: |
+          git add .
+          git commit --amend -m "Release $LATEST_TAG"
+          git tag -f $LATEST_TAG
+          git push --atomic origin main $LATEST_TAG
 
-      # - name: Release
-      #   uses: ./.github/actions/release
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create GitHub Release
-        uses: ncipollo/release-action@v1
+      - name: Release
+        uses: ./.github/actions/release
         with:
-          name: "${{ env.LATEST_TAG }}"
-          tag: "${{ env.LATEST_TAG }}"
-          generateReleaseNotes: "true"
-          makeLatest: "true"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          release-tag: $LATEST_TAG
 
-      # - name: Update Doc
-      #   uses: ./.github/actions/update-doc
-      #   with:
-      #     latest_tag: $LATEST_TAG
-      #     access_token: ${{ secrets.PAT_TOKEN }}
+      - name: Update Doc
+        uses: ./.github/actions/update-doc
+        with:
+          latest_tag: $LATEST_TAG
+          # need to get/update access token
+          access_token: ${{ secrets.PAT_TOKEN }}

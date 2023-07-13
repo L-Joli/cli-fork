@@ -17,13 +17,25 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Create GitHub Release
-      uses: DevCycleHQ/release-action/gh-release@main
-      with:
-        draft: ${{ inputs.draft }}
-        prerelease: ${{ inputs.prerelease }}
-        github-token: ${{ inputs.github-token }}
+     # - name: Create GitHub Release
+    #   uses: DevCycleHQ/release-action/gh-release@main
+    #   with:
+    #     draft: true
+    #     prerelease: true
+    #     github-token: ${{ inputs.github-token }}
 
+    # Replace with DevCycleHQ/release-action/gh-release@main when it's ready
+    - name: Create GitHub Release
+      uses: ncipollo/release-action@v1
+      with:
+        name: "${{ inputs.release-tag }}"
+        tag: "${{ inputs.release-tag }}"
+        generateReleaseNotes: "true"
+        makeLatest: "true"
+        token: ${{ inputs.github-token }}
+        prerelease: ${{ inputs.prerelease }}
+        draft: ${{ inputs.draft }}
+        
     # - name: Publish to NPM
     #   shell: bash
     #   env:

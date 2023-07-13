@@ -9,10 +9,18 @@ on:
         type: boolean
         default: true
       prerelease:
-        description: 'Create a prerelease?'
+        description: 'Prerelease?'
         required: false
         type: boolean
         default: true
+      npm-version:
+        description: 'NPM version bump? (default: patch)'
+        required: false
+        options: 
+          - major
+          - minor
+          - patch
+        default: 'patch'
 
   # schedule:
   #   - cron: '0 12 * * 2'  # Runs every Tuesday at 12:00 PM (noon) ET
@@ -50,7 +58,7 @@ jobs:
         run: yarn build
 
       - name: Bump CLI version
-        run: npm version patch --force
+        run: npm version ${{ inputs.npm-version }} --force
 
       - name: Get latest tag
         run: echo "LATEST_TAG=$(git describe --abbrev=0 --tags)" >> $GITHUB_ENV
@@ -67,12 +75,12 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           release-tag: $LATEST_TAG
-          draft: ${{inputs.draft-release}}
-          prerelease: ${{inputs.prerelease}}
+          draft: ${{ inputs.draft-release }}
+          prerelease: ${{ inputs.prerelease }}
 
       - name: Update Doc
         uses: ./.github/actions/update-doc
         with:
-          latest_tag: $LATEST_TAG
+          latest_tag: ${{ env.LATEST_TAG }}
           # need to get/update access token
           access_token: ${{ secrets.PAT_TOKEN }}

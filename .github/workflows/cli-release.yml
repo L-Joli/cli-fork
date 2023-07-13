@@ -16,10 +16,12 @@ on:
       npm-version:
         description: 'NPM version bump? (default: patch)'
         required: false
+        type: choice
         options: 
           - major
           - minor
           - patch
+        default: 'patch'
 
   # schedule:
   #   - cron: '0 12 * * 2'  # Runs every Tuesday at 12:00 PM (noon) ET

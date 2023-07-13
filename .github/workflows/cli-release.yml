@@ -53,18 +53,18 @@ jobs:
       #     git tag -f $LATEST_TAG
       #     git push origin main --follow-tags
 
-      - name: Release
-        uses: ./.github/actions/release
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Create GitHub Release
-      #   uses: ncipollo/release-action@v1
+      # - name: Release
+      #   uses: ./.github/actions/release
       #   with:
-      #     name: $LATEST_TAG
-      #     tag: $LATEST_TAG
-      #     generateReleaseNotes: "true"
-      #     makeLatest: "true"
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          name: $LATEST_TAG
+          tag: $LATEST_TAG
+          generateReleaseNotes: "true"
+          makeLatest: "true"
 
       # - name: Update Doc
       #   uses: ./.github/actions/update-doc

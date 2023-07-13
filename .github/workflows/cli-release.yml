@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       draft-release:
-        description: 'Whether to create a draft (unpublished) release'
+        description: 'Draft release?'
         required: false
         default: 'true'
       prerelease:
-        description: 'Whether to create a prerelease release'
+        description: 'Create a prerelease?'
         required: false
         default: 'true'
 

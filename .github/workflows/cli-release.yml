@@ -60,8 +60,8 @@ jobs:
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
         with:
-          name: "${{ env.NOW }}"
-          tag: "${{ env.NOW }}"
+          name: "${{ env.LATEST_TAG }}"
+          tag: "${{ env.LATEST_TAG }}"
           generateReleaseNotes: "true"
           makeLatest: "true"
 

@@ -32,4 +32,4 @@ DESCRIPTION
   Select which organization to access through the API
 ```
 
-_See code: [dist/commands/org/index.ts](https://github.com/DevCycleHQ/cli/blob/v6.0.12/dist/commands/org/index.ts)_
+_See code: [dist/commands/org/index.ts](https://github.com/DevCycleHQ/cli/blob/v6.0.13/dist/commands/org/index.ts)_

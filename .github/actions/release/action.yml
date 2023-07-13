@@ -13,6 +13,9 @@ inputs:
     required: false
     description: 'Whether to create a prerelease release'
     default: 'true'
+  release-tag:
+    required: true
+    description: 'The tag to use for the release'
 
 runs:
   using: 'composite'

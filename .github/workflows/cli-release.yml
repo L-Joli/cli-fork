@@ -2,6 +2,16 @@ name: Release Test
 
 on:
   workflow_dispatch:
+    inputs:
+      draft-release:
+        description: 'Whether to create a draft (unpublished) release'
+        required: false
+        default: 'true'
+      prerelease:
+        description: 'Whether to create a prerelease release'
+        required: false
+        default: 'true'
+
   # schedule:
   #   - cron: '0 12 * * 2'  # Runs every Tuesday at 12:00 PM (noon) ET
 permissions:
@@ -55,6 +65,8 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           release-tag: $LATEST_TAG
+          draft: ${{inputs.draft-release}}
+          prerelease: ${{inputs.prerelease}}
 
       - name: Update Doc
         uses: ./.github/actions/update-doc

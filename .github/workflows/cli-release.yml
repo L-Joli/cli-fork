@@ -40,11 +40,11 @@ jobs:
       # - name: Bump CLI version
       #   run: npm version patch --force
 
-      # - name: Get latest tag
-      #   run: |
-      #     echo "LATEST_TAG=$(git describe --abbrev=0 --tags)" >> $GITHUB_ENV
-      #     git tag
-      #     git describe --abbrev=0 --tags
+      - name: Get latest tag
+        run: |
+          echo "LATEST_TAG=$(git describe --abbrev=0 --tags)" >> $GITHUB_ENV
+          git tag
+          git describe --abbrev=0 --tags
           
       # - name: Commit and push tag to main branch
       #   run: |
@@ -53,10 +53,18 @@ jobs:
       #     git tag -f $LATEST_TAG
       #     git push origin main --follow-tags
 
-      - name: Release
-        uses: ./.github/actions/release
+      # - name: Release
+      #   uses: ./.github/actions/release
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: "$LATEST_TAG"
+          tag: "$LATEST_TAG"
+          generateReleaseNotes: "true"
+          makeLatest: "true"
 
       # - name: Update Doc
       #   uses: ./.github/actions/update-doc
